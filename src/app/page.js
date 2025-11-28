@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Container, Typography, Box, Button, Grid, Card, CardContent } from '@mui/material';
+import { Container, Typography, Box, Grid, Card, CardContent } from '@mui/material';
 import Link from 'next/link';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import ArticleIcon from '@mui/icons-material/Article';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
 
 export default function Home() {
     const features = [
@@ -29,6 +30,13 @@ export default function Home() {
             icon: <ArticleIcon sx={{ fontSize: 48, color: '#f59e0b' }} />,
             link: '/press-release',
             color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+        },
+        {
+            title: 'Contact Management',
+            description: 'Review and respond to contact form submissions',
+            icon: <ContactMailIcon sx={{ fontSize: 48, color: '#14b8a6' }} />,
+            link: '/contact',
+            color: 'linear-gradient(135deg, #34e89e 0%, #0f3443 100%)',
         },
     ];
 

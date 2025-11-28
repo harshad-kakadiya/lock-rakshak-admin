@@ -13,6 +13,7 @@ function Navbar() {
         { path: '/video', label: 'Video' },
         { path: '/gallery', label: 'Gallery' },
         { path: '/press-release', label: 'Press Release' },
+        { path: '/contact', label: 'Contact' },
     ];
 
     return (
