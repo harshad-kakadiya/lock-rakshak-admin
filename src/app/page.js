@@ -70,7 +70,7 @@ export default function Home() {
                             fontSize: { xs: '2.5rem', md: '3.5rem' },
                         }}
                     >
-                        Welcome to Life Line Admin
+                        Welcome to Lock Rakshak Admin
                     </Typography>
                     <Typography 
                         variant="h6" 
