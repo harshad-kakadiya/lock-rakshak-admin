@@ -5,10 +5,6 @@ import {
     Container,
     Typography,
     Button,
-    Grid,
-    Card,
-    CardContent,
-    CardActions,
     IconButton,
     Dialog,
     DialogTitle,
@@ -19,6 +15,14 @@ import {
     CircularProgress,
     Alert,
     Collapse,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -160,15 +164,7 @@ export default function PersonDetailPage() {
 
         if (!personDetails.length) {
             return (
-                <Card
-                    sx={{
-                        textAlign: 'center',
-                        py: 8,
-                        borderRadius: '20px',
-                        background: '#ffffff',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                    }}
-                >
+                <Box sx={{ textAlign: 'center', py: 10 }}>
                     <PersonIcon sx={{ fontSize: 80, color: '#cbd5e1', mb: 2 }} />
                     <Typography variant="h6" color="textSecondary" sx={{ mb: 1 }}>
                         No person details yet
@@ -188,86 +184,93 @@ export default function PersonDetailPage() {
                     >
                         Add Your First Person Detail
                     </Button>
-                </Card>
+                </Box>
             );
         }
 
         return (
-            <Grid container spacing={3}>
-                {personDetails.map((person) => (
-                    <Grid item xs={12} sm={6} md={4} key={person.id || person._id}>
-                        <Card
-                            sx={{
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                borderRadius: '20px',
-                                background: '#ffffff',
-                                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                overflow: 'hidden',
-                                '&:hover': {
-                                    transform: 'translateY(-8px)',
-                                    boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
-                                },
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    height: 200,
-                                    background: 'linear-gradient(135deg, #a78bfa 0%, #c084fc 100%)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <PersonIcon sx={{ fontSize: 80, color: '#ffffff' }} />
-                            </Box>
-                            <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                                {person.phone && (
-                                    <Typography variant="body2" sx={{ color: '#475569', mb: 1 }}>
-                                        📞 {person.phone}
-                                    </Typography>
-                                )}
-                                {person.address && (
-                                    <Typography variant="body2" sx={{ color: '#475569', mb: 1 }}>
-                                        📍 {person.address}
-                                    </Typography>
-                                )}
-                                {person.email && (
-                                    <Typography variant="body2" sx={{ color: '#475569', mb: 0.5 }}>
-                                        📧 {person.email}
-                                    </Typography>
-                                )}
-                            </CardContent>
-                            <CardActions sx={{ p: 2, pt: 0, justifyContent: 'flex-end' }}>
-                                <IconButton
-                                    onClick={() => handleOpenEditDialog(person)}
+            <Paper
+                elevation={0}
+                sx={{
+                    borderRadius: '16px',
+                    border: '1px solid #e2e8f0',
+                    overflow: 'hidden',
+                    background: '#ffffff',
+                }}
+            >
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell sx={{ fontWeight: 600 }}>Phone</TableCell>
+                                <TableCell sx={{ fontWeight: 600 }}>Address</TableCell>
+                                <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
+                                <TableCell sx={{ fontWeight: 600 }} align="right">
+                                    Actions
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {personDetails.map((person) => (
+                                <TableRow
+                                    key={person.id || person._id}
                                     sx={{
-                                        color: '#6366f1',
                                         '&:hover': {
-                                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                                            backgroundColor: 'rgba(167, 139, 250, 0.04)',
                                         },
                                     }}
                                 >
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton
-                                    onClick={(e) => handleDelete(person.id || person._id, e)}
-                                    sx={{
-                                        color: '#ef4444',
-                                        '&:hover': {
-                                            backgroundColor: 'rgba(239,68,68,0.1)',
-                                        },
-                                    }}
-                                >
-                                    <DeleteIcon />
-                                </IconButton>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
+                                    <TableCell>
+                                        <Typography variant="body2" sx={{ color: '#475569' }}>
+                                            {person.phone || '—'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="body2" sx={{ color: '#475569' }}>
+                                            {person.address || '—'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="body2" sx={{ color: '#475569' }}>
+                                            {person.email || '—'}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                                            <Tooltip title="Edit person detail">
+                                                <IconButton
+                                                    onClick={() => handleOpenEditDialog(person)}
+                                                    sx={{
+                                                        color: '#6366f1',
+                                                        '&:hover': {
+                                                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                                                        },
+                                                    }}
+                                                >
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Delete person detail">
+                                                <IconButton
+                                                    onClick={(e) => handleDelete(person.id || person._id, e)}
+                                                    sx={{
+                                                        color: '#ef4444',
+                                                        '&:hover': {
+                                                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                        },
+                                                    }}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
         );
     };
 
@@ -322,7 +325,17 @@ export default function PersonDetailPage() {
                     )}
                 </Collapse>
 
-                {renderContent()}
+                <Paper
+                    elevation={0}
+                    sx={{
+                        borderRadius: '16px',
+                        border: '1px solid #e2e8f0',
+                        overflow: 'hidden',
+                        background: '#ffffff',
+                    }}
+                >
+                    {renderContent()}
+                </Paper>
             </Container>
 
             <Dialog

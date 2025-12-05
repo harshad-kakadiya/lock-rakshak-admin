@@ -5,9 +5,7 @@ import {
     Container,
     Typography,
     Box,
-    Card,
-    CardMedia,
-    CardActions,
+    Paper,
     IconButton,
     Dialog,
     DialogTitle,
@@ -15,7 +13,14 @@ import {
     DialogActions,
     Button,
     CircularProgress,
-    Grid,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Avatar,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
@@ -177,7 +182,7 @@ export default function SlideImagePage() {
                         <CircularProgress size={60} sx={{ color: '#FFB5C3' }} />
                     </Box>
                 ) : !hasSlides ? (
-                    <Card
+                    <Paper
                         sx={{
                             textAlign: 'center',
                             py: 8,
@@ -210,45 +215,70 @@ export default function SlideImagePage() {
                         >
                             Add Your First Slide Image
                         </Button>
-                    </Card>
+                    </Paper>
                 ) : (
-                    <Grid container spacing={3}>
-                        {slides.map((slide) => (
-                            <Grid item xs={12} sm={6} md={4} key={slide.id}>
-                                <Card
-                                    sx={{
-                                        borderRadius: '20px',
-                                        background: '#ffffff',
-                                        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                                        overflow: 'hidden',
-                                    }}
-                                >
-                                    <CardMedia
-                                        component="img"
-                                        height="260"
-                                        image={slide.imageUrl}
-                                        alt="Slide image"
-                                        sx={{
-                                            objectFit: 'cover',
-                                        }}
-                                    />
-                                    <CardActions sx={{ justifyContent: 'flex-end', p: 2 }}>
-                                        <IconButton
-                                            onClick={() => handleDelete(slide.id)}
+                    <Paper
+                        elevation={0}
+                        sx={{
+                            borderRadius: '16px',
+                            border: '1px solid #e2e8f0',
+                            overflow: 'hidden',
+                            background: '#ffffff',
+                        }}
+                    >
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ fontWeight: 600 }}>Image</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }} align="right">
+                                            Actions
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {slides.map((slide) => (
+                                        <TableRow
+                                            key={slide.id}
                                             sx={{
-                                                color: '#ef4444',
                                                 '&:hover': {
-                                                    backgroundColor: 'rgba(239,68,68,0.1)',
+                                                    backgroundColor: 'rgba(255, 181, 195, 0.04)',
                                                 },
                                             }}
                                         >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
+                                            <TableCell>
+                                                <Avatar
+                                                    src={slide.imageUrl}
+                                                    alt="Slide image"
+                                                    variant="rounded"
+                                                    sx={{
+                                                        width: 200,
+                                                        height: 80,
+                                                        borderRadius: '12px',
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Tooltip title="Delete slide image">
+                                                    <IconButton
+                                                        onClick={() => handleDelete(slide.id)}
+                                                        sx={{
+                                                            color: '#ef4444',
+                                                            '&:hover': {
+                                                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                            },
+                                                        }}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
                 )}
 
                 <Dialog

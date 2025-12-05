@@ -5,10 +5,6 @@ import {
     Container,
     Typography,
     Button,
-    Grid,
-    Card,
-    CardContent,
-    CardActions,
     IconButton,
     Dialog,
     DialogTitle,
@@ -17,9 +13,16 @@ import {
     TextField,
     Box,
     CircularProgress,
-    Chip,
     Modal,
     Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Avatar,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -242,201 +245,96 @@ export default function VideoPage() {
                         </Button>
                     </Card>
                 ) : (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                        {videos.map((video, index) => (
-                            <Card
-                                key={video.id ?? video._id ?? index}
-                                onClick={() => handleOpenVideoModal(video)}
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: { xs: 'column', md: 'row' },
-                                    borderRadius: '20px',
-                                    background: '#ffffff',
-                                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                    overflow: 'hidden',
-                                    cursor: 'pointer',
-                                    position: 'relative',
-                                    '&:hover': {
-                                        transform: 'translateX(8px)',
-                                        boxShadow: '0 8px 40px rgba(0,0,0,0.15)',
-                                        '& .play-overlay': {
-                                            opacity: 1,
-                                        },
-                                        '& .video-thumbnail': {
-                                            transform: 'scale(1.05)',
-                                        },
-                                    },
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        position: 'relative',
-                                        width: { xs: '100%', md: '400px' },
-                                        minWidth: { md: '400px' },
-                                        height: { xs: '250px', md: '200px' },
-                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                        overflow: 'hidden',
-                                    }}
-                                >
-                                    {video.image || video.videoUrl ? (
-                                        <>
-                                            {video.image ? (
-                                                <Box
-                                                    component="img"
+                    <Paper
+                        elevation={0}
+                        sx={{
+                            borderRadius: '16px',
+                            border: '1px solid #e2e8f0',
+                            overflow: 'hidden',
+                            background: '#ffffff',
+                        }}
+                    >
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ fontWeight: 600 }}>Thumbnail</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Title</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Description</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }} align="right">
+                                            Actions
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {videos.map((video) => (
+                                        <TableRow
+                                            key={video.id ?? video._id}
+                                            onClick={() => handleOpenVideoModal(video)}
+                                            sx={{
+                                                cursor: 'pointer',
+                                                '&:hover': {
+                                                    backgroundColor: 'rgba(102, 126, 234, 0.04)',
+                                                },
+                                            }}
+                                        >
+                                            <TableCell>
+                                                <Avatar
                                                     src={video.image}
-                                                    alt={video.title}
-                                                    className="video-thumbnail"
+                                                    variant="rounded"
                                                     sx={{
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        objectFit: 'cover',
-                                                        transition: 'transform 0.5s ease',
-                                                    }}
-                                                />
-                                            ) : (
-                                                <video
-                                                    className="video-thumbnail"
-                                                    src={video.videoUrl}
-                                                    style={{
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        objectFit: 'cover',
-                                                        transition: 'transform 0.5s ease',
-                                                    }}
-                                                    muted
-                                                    loop
-                                                    playsInline
-                                                />
-                                            )}
-                                            <Box
-                                                className="play-overlay"
-                                                sx={{
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    left: 0,
-                                                    right: 0,
-                                                    bottom: 0,
-                                                    background: 'linear-gradient(to right, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%)',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    opacity: 0,
-                                                    transition: 'opacity 0.3s ease',
-                                                }}
-                                            >
-                                                <Box
-                                                    sx={{
-                                                        background: 'rgba(255,255,255,0.2)',
-                                                        backdropFilter: 'blur(10px)',
-                                                        borderRadius: '50%',
-                                                        p: 2,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
+                                                        width: 100,
+                                                        height: 60,
+                                                        borderRadius: '8px',
                                                     }}
                                                 >
-                                                    <PlayCircleFilledIcon
-                                                        sx={{
-                                                            fontSize: 60,
-                                                            color: '#ffffff',
+                                                    <VideoLibraryIcon />
+                                                </Avatar>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                                    {video.title}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant="body2"
+                                                    color="textSecondary"
+                                                    sx={{
+                                                        display: '-webkit-box',
+                                                        WebkitLineClamp: 2,
+                                                        WebkitBoxOrient: 'vertical',
+                                                        overflow: 'hidden',
+                                                        maxWidth: '400px',
+                                                    }}
+                                                >
+                                                    {video.description}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Tooltip title="Delete video">
+                                                    <IconButton
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleDelete(video.id ?? video._id, e);
                                                         }}
-                                                    />
-                                                </Box>
-                                            </Box>
-                                        </>
-                                    ) : (
-                                        <Box
-                                            sx={{
-                                                width: '100%',
-                                                height: '100%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <VideoLibraryIcon sx={{ fontSize: 60, color: 'rgba(255,255,255,0.7)' }} />
-                                        </Box>
-                                    )}
-                                    <Chip
-                                        label="Video"
-                                        size="small"
-                                        sx={{
-                                            position: 'absolute',
-                                            top: 12,
-                                            left: 12,
-                                            background: 'rgba(255,255,255,0.95)',
-                                            backdropFilter: 'blur(10px)',
-                                            fontWeight: 700,
-                                            fontSize: '0.75rem',
-                                        }}
-                                    />
-                                </Box>
-                                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 3 }}>
-                                    <Box sx={{ flex: 1 }}>
-                                        <Typography
-                                            variant="h5"
-                                            component="h2"
-                                            sx={{
-                                                fontWeight: 700,
-                                                mb: 1.5,
-                                                color: '#1e293b',
-                                                fontSize: '1.5rem',
-                                            }}
-                                        >
-                                            {video.title}
-                                        </Typography>
-                                        <Typography
-                                            variant="body1"
-                                            color="textSecondary"
-                                            sx={{
-                                                display: '-webkit-box',
-                                                WebkitLineClamp: { xs: 3, md: 2 },
-                                                WebkitBoxOrient: 'vertical',
-                                                overflow: 'hidden',
-                                                lineHeight: 1.7,
-                                                fontSize: '1rem',
-                                                mb: 2,
-                                            }}
-                                        >
-                                            {video.description}
-                                        </Typography>
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                            pt: 2,
-                                            borderTop: '1px solid #e2e8f0',
-                                        }}
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                            <PlayCircleFilledIcon sx={{ fontSize: 20, color: '#667eea' }} />
-                                            <Typography variant="body2" sx={{ color: '#667eea', fontWeight: 600 }}>
-                                                Click to play
-                                            </Typography>
-                                        </Box>
-                                        <IconButton
-                                            onClick={(e) => handleDelete(video.id ?? video._id, e)}
-                                            sx={{
-                                                color: '#ef4444',
-                                                background: 'rgba(248,113,113,0.1)',
-                                                '&:hover': {
-                                                    backgroundColor: 'rgba(248,113,113,0.2)',
-                                                    transform: 'scale(1.05)',
-                                                },
-                                                transition: 'all 0.2s ease',
-                                            }}
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </Box>
-                                </Box>
-                            </Card>
-                        ))}
-                    </Box>
+                                                        sx={{
+                                                            color: '#ef4444',
+                                                            '&:hover': {
+                                                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                            },
+                                                        }}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
                 )}
 
                 {/* Video Player Modal */}

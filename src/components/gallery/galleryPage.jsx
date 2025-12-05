@@ -5,10 +5,6 @@ import {
     Container,
     Typography,
     Button,
-    Grid,
-    Card,
-    CardMedia,
-    CardActions,
     IconButton,
     Dialog,
     DialogTitle,
@@ -16,9 +12,17 @@ import {
     DialogActions,
     Box,
     CircularProgress,
-    Fade,
     TextField,
     MenuItem,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Avatar,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
@@ -209,7 +213,7 @@ export default function GalleryPage() {
                         <CircularProgress size={60} sx={{ color: '#f5576c' }} />
                     </Box>
                 ) : photos.length === 0 ? (
-                    <Card
+                    <Paper
                         sx={{
                             textAlign: 'center',
                             py: 8,
@@ -237,99 +241,79 @@ export default function GalleryPage() {
                         >
                             Add Your First Photo
                         </Button>
-                    </Card>
+                    </Paper>
                 ) : (
-                    <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-                        {photos.map((photo, index) => (
-                            <Grid
-                                item
-                                xs={12}
-                                sm={6}
-                                md={4}
-                                lg={3}
-                                key={photo._id ?? photo.id ?? index}
-                            >
-                                <Fade in timeout={300 + index * 100}>
-                                    <Card
-                                        sx={{
-                                            height: '100%',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            borderRadius: '20px',
-                                            background: '#ffffff',
-                                            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                            overflow: 'hidden',
-                                            position: 'relative',
-                                            '&:hover': {
-                                                transform: 'translateY(-8px) scale(1.02)',
-                                                boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
-                                            },
-                                        }}
-                                    >
-                                        <Box sx={{ position: 'relative', overflow: 'hidden' }}>
-                                            <CardMedia
-                                                component="img"
-                                                height="300"
-                                                image={photo.photoUrl}
-                                                alt="Gallery image"
+                    <Paper
+                        elevation={0}
+                        sx={{
+                            borderRadius: '16px',
+                            border: '1px solid #e2e8f0',
+                            overflow: 'hidden',
+                            background: '#ffffff',
+                        }}
+                    >
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ fontWeight: 600 }}>Image</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Category</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }} align="right">
+                                            Actions
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {photos.map((photo) => {
+                                        const categoryName = categories.find(cat => (cat._id ?? cat.id) === photo.category)?.categoryname ?? categories.find(cat => (cat._id ?? cat.id) === photo.category)?.name ?? '—';
+                                        return (
+                                            <TableRow
+                                                key={photo._id ?? photo.id}
                                                 sx={{
-                                                    objectFit: 'cover',
-                                                    transition: 'transform 0.5s ease',
                                                     '&:hover': {
-                                                        transform: 'scale(1.1)',
-                                                    },
-                                                }}
-                                            />
-                                            {/* floating delete button */}
-                                            <Box
-                                                sx={{
-                                                    position: 'absolute',
-                                                    top: 12,
-                                                    right: 12,
-                                                    backgroundColor: 'rgba(0,0,0,0.45)',
-                                                    borderRadius: '999px',
-                                                }}
-                                            >
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => handleDelete(photo._id ?? photo.id)}
-                                                    sx={{
-                                                        color: '#ffffff',
-                                                        '&:hover': {
-                                                            backgroundColor: 'rgba(239,68,68,0.9)',
-                                                        },
-                                                    }}
-                                                >
-                                                    <DeleteIcon fontSize="small" />
-                                                </IconButton>
-                                            </Box>
-                                        </Box>
-                                        {/* mobile delete button */}
-                                        <CardActions
-                                            sx={{
-                                                justifyContent: 'center',
-                                                p: 2,
-                                                display: { xs: 'flex', sm: 'none' },
-                                            }}
-                                        >
-                                            <IconButton
-                                                onClick={() => handleDelete(photo._id ?? photo.id)}
-                                                sx={{
-                                                    color: '#ef4444',
-                                                    '&:hover': {
-                                                        backgroundColor: 'rgba(239,68,68,0.1)',
+                                                        backgroundColor: 'rgba(245, 87, 108, 0.04)',
                                                     },
                                                 }}
                                             >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </CardActions>
-                                    </Card>
-                                </Fade>
-                            </Grid>
-                        ))}
-                    </Grid>
+                                                <TableCell>
+                                                    <Avatar
+                                                        src={photo.photoUrl}
+                                                        alt="Gallery image"
+                                                        variant="rounded"
+                                                        sx={{
+                                                            width: 80,
+                                                            height: 80,
+                                                            borderRadius: '12px',
+                                                        }}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                                        {categoryName}
+                                                    </Typography>
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <Tooltip title="Delete photo">
+                                                        <IconButton
+                                                            onClick={() => handleDelete(photo._id ?? photo.id)}
+                                                            sx={{
+                                                                color: '#ef4444',
+                                                                '&:hover': {
+                                                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                                },
+                                                            }}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
                 )}
 
                 <Dialog

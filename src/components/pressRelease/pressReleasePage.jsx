@@ -5,11 +5,6 @@ import {
     Container,
     Typography,
     Button,
-    Grid,
-    Card,
-    CardMedia,
-    CardContent,
-    CardActions,
     IconButton,
     Dialog,
     DialogTitle,
@@ -18,6 +13,16 @@ import {
     TextField,
     Box,
     CircularProgress,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Avatar,
+    Link, Card,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -207,96 +212,119 @@ export default function PressReleasePage() {
                         </Button>
                     </Card>
                 ) : (
-                    <Grid container spacing={3}>
-                        {pressReleases.map((pressRelease) => (
-                            <Grid item xs={12} sm={6} md={4} key={pressRelease.id}>
-                                <Card
-                                    sx={{
-                                        height: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        borderRadius: '20px',
-                                        background: '#ffffff',
-                                        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                        overflow: 'hidden',
-                                        '&:hover': {
-                                            transform: 'translateY(-8px)',
-                                            boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
-                                        },
-                                    }}
-                                >
-                                    <Box sx={{ position: 'relative', overflow: 'hidden' }}>
-                                        <CardMedia
-                                            component="img"
-                                            height="200"
-                                            image={pressRelease.imageUrl}
-                                            alt={pressRelease.title}
+                    <Paper
+                        elevation={0}
+                        sx={{
+                            borderRadius: '16px',
+                            border: '1px solid #e2e8f0',
+                            overflow: 'hidden',
+                            background: '#ffffff',
+                        }}
+                    >
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ fontWeight: 600 }}>Image</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Title</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Publish Date</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Link</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }} align="right">
+                                            Actions
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {pressReleases.map((pressRelease) => (
+                                        <TableRow
+                                            key={pressRelease.id}
                                             sx={{
-                                                objectFit: 'cover',
-                                                transition: 'transform 0.5s ease',
                                                 '&:hover': {
-                                                    transform: 'scale(1.1)',
-                                                },
-                                            }}
-                                        />
-                                    </Box>
-                                    <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                                        <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mb: 1, color: '#1e293b' }}>
-                                            {pressRelease.title}
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ color: '#475569', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                            <OpenInNewIcon fontSize="small" sx={{ color: '#4facfe' }} />
-                                            {pressRelease.publishDate
-                                                ? new Date(pressRelease.publishDate).toLocaleDateString()
-                                                : 'No date provided'}
-                                        </Typography>
-                                        {pressRelease.link && (
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    color: '#0284c7',
-                                                    wordBreak: 'break-all',
-                                                    mt: 1,
-                                                }}
-                                            >
-                                                {pressRelease.link}
-                                            </Typography>
-                                        )}
-                                    </CardContent>
-                                    <CardActions sx={{ p: 2, pt: 0, justifyContent: 'flex-end' }}>
-                                        {pressRelease.link && (
-                                            <Button
-                                                size="small"
-                                                component="a"
-                                                href={pressRelease.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                startIcon={<OpenInNewIcon />}
-                                                sx={{
-                                                    textTransform: 'none',
-                                                    color: '#2563eb',
-                                                }}
-                                            >
-                                                Visit Link
-                                            </Button>
-                                        )}
-                                        <IconButton
-                                            onClick={() => handleDelete(pressRelease.id)}
-                                            sx={{
-                                                color: '#ef4444',
-                                                '&:hover': {
-                                                    backgroundColor: 'rgba(239,68,68,0.1)',
+                                                    backgroundColor: 'rgba(79, 172, 254, 0.04)',
                                                 },
                                             }}
                                         >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
+                                            <TableCell>
+                                                <Avatar
+                                                    src={pressRelease.imageUrl}
+                                                    alt={pressRelease.title}
+                                                    variant="rounded"
+                                                    sx={{
+                                                        width: 100,
+                                                        height: 60,
+                                                        borderRadius: '8px',
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                                    {pressRelease.title}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="body2" sx={{ color: '#475569' }}>
+                                                    {pressRelease.publishDate
+                                                        ? new Date(pressRelease.publishDate).toLocaleDateString()
+                                                        : '—'}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                {pressRelease.link ? (
+                                                    <Link
+                                                        href={pressRelease.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        sx={{
+                                                            color: '#0284c7',
+                                                            textDecoration: 'none',
+                                                            '&:hover': {
+                                                                textDecoration: 'underline',
+                                                            },
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: 0.5,
+                                                        }}
+                                                    >
+                                                        <OpenInNewIcon fontSize="small" />
+                                                        <Typography
+                                                            variant="body2"
+                                                            sx={{
+                                                                maxWidth: '200px',
+                                                                overflow: 'hidden',
+                                                                textOverflow: 'ellipsis',
+                                                                whiteSpace: 'nowrap',
+                                                            }}
+                                                        >
+                                                            {pressRelease.link}
+                                                        </Typography>
+                                                    </Link>
+                                                ) : (
+                                                    <Typography variant="body2" color="textSecondary">
+                                                        —
+                                                    </Typography>
+                                                )}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <Tooltip title="Delete press release">
+                                                    <IconButton
+                                                        onClick={() => handleDelete(pressRelease.id)}
+                                                        sx={{
+                                                            color: '#ef4444',
+                                                            '&:hover': {
+                                                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                            },
+                                                        }}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
                 )}
 
                 <Dialog
