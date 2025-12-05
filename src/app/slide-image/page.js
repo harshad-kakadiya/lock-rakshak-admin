@@ -277,7 +277,7 @@ export default function SlideImagePage() {
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 2 }}>
                             <Box>
                                 <Typography variant="body2" sx={{ mb: 1.5, fontWeight: 500, color: '#475569' }}>
-                                    Select Image
+                                    Select Image (size in px : 1900 * 600)(size in inch : 19.8 * 6.25)
                                 </Typography>
                                 <Box
                                     sx={{
