@@ -15,6 +15,7 @@ function Navbar() {
         { path: '/slide-image', label: 'Slide Image' },
         { path: '/press-release', label: 'Press Release' },
         { path: '/contact', label: 'Contact' },
+        { path: '/person-detail', label: 'Person Detail' },
     ];
 
     return (

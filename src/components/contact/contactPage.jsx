@@ -277,6 +277,7 @@ export default function ContactPage() {
                     </Box>
                 </Box>
 
+
                 <Collapse in={Boolean(feedback.message)}>
                     {feedback.message && (
                         <Alert

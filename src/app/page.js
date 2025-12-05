@@ -8,43 +8,51 @@ import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import ArticleIcon from '@mui/icons-material/Article';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function Home() {
     const features = [
         {
             title: 'Video Management',
             description: 'Upload, edit, and manage your video content with ease',
-            icon: <VideoLibraryIcon sx={{ fontSize: 48, color: '#6366f1' }} />,
+            icon: <VideoLibraryIcon sx={{ fontSize: 80, color: '#ffffff' }} />,
             link: '/video',
             color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         },
         {
             title: 'Gallery Management',
             description: 'Organize and showcase your photo collection',
-            icon: <PhotoLibraryIcon sx={{ fontSize: 48, color: '#10b981' }} />,
+            icon: <PhotoLibraryIcon sx={{ fontSize: 80, color: '#ffffff' }} />,
             link: '/gallery',
             color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
         },
         {
             title: 'Press Release',
             description: 'Manage press releases with images and links',
-            icon: <ArticleIcon sx={{ fontSize: 48, color: '#f59e0b' }} />,
+            icon: <ArticleIcon sx={{ fontSize: 80, color: '#ffffff' }} />,
             link: '/press-release',
             color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
         },
         {
             title: 'Contact Management',
             description: 'Review and respond to contact form submissions',
-            icon: <ContactMailIcon sx={{ fontSize: 48, color: '#14b8a6' }} />,
+            icon: <ContactMailIcon sx={{ fontSize: 80, color: '#ffffff' }} />,
             link: '/contact',
             color: 'linear-gradient(135deg, #34e89e 0%, #0f3443 100%)',
         },
         {
             title: 'Slide Image',
             description: 'Manage and organize slide images for your content',
-            icon: <SlideshowIcon sx={{ fontSize: 48, color: '#f97316' }} />,
+            icon: <SlideshowIcon sx={{ fontSize: 80, color: '#ffffff' }} />,
             link: '/slide-image',
             color: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+        },
+        {
+            title: 'Person Detail ',
+            description: 'Manage and organize person details and information',
+            icon: <PersonIcon sx={{ fontSize: 80, color: '#ffffff' }} />,
+            link: '/person-detail',
+            color: 'linear-gradient(135deg, #a78bfa 0%, #c084fc 100%)',
         },
     ];
 
@@ -91,59 +99,70 @@ export default function Home() {
                         Manage your content with a modern, intuitive interface
                     </Typography>
                 </Box>
-                <Grid container spacing={4}>
+                <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
                     {features.map((feature, index) => (
-                        <Grid item xs={12} md={4} key={index}>
-                            <Link href={feature.link} style={{ textDecoration: 'none' }}>
+                        <Grid item xs={12} sm={6} md={4} lg={4} key={index}>
+                            <Link href={feature.link} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
                                 <Card
                                     sx={{
                                         height: '100%',
-                                        background: '#ffffff',
+                                        minHeight: '320px',
+                                        display: 'flex',
+                                        flexDirection: 'column',
                                         borderRadius: '20px',
-                                        boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
+                                        background: '#ffffff',
+                                        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                                         cursor: 'pointer',
                                         overflow: 'hidden',
-                                        position: 'relative',
                                         '&:hover': {
                                             transform: 'translateY(-8px)',
-                                            boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
-                                            '& .feature-icon': {
-                                                transform: 'scale(1.1) rotate(5deg)',
-                                            },
+                                            boxShadow: '0 12px 40px rgba(0,0,0,0.15)',
                                         },
                                     }}
                                 >
                                     <Box
                                         sx={{
-                                            height: '120px',
+                                            flex: '0 0 65%',
+                                            minHeight: '200px',
                                             background: feature.color,
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            '&::before': {
-                                                content: '""',
-                                                position: 'absolute',
-                                                top: '-50%',
-                                                left: '-50%',
-                                                width: '200%',
-                                                height: '200%',
-                                                background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)',
-                                                animation: 'pulse 3s ease-in-out infinite',
-                                            },
                                         }}
                                     >
-                                        <Box className="feature-icon" sx={{ transition: 'transform 0.3s ease', zIndex: 1 }}>
-                                            {feature.icon}
-                                        </Box>
+                                        {feature.icon}
                                     </Box>
-                                    <CardContent sx={{ p: 3 }}>
-                                        <Typography variant="h5" component="h2" sx={{ fontWeight: 600, mb: 1, color: '#1e293b' }}>
+                                    <CardContent 
+                                        sx={{ 
+                                            flex: '0 0 35%',
+                                            p: 3,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            backgroundColor: '#ffffff',
+                                        }}
+                                    >
+                                        <Typography 
+                                            variant="h5" 
+                                            component="h2" 
+                                            sx={{ 
+                                                fontWeight: 700, 
+                                                mb: 1, 
+                                                color: '#1e293b',
+                                                fontSize: '1.25rem',
+                                            }}
+                                        >
                                             {feature.title}
                                         </Typography>
-                                        <Typography variant="body2" color="textSecondary" sx={{ lineHeight: 1.7 }}>
+                                        <Typography 
+                                            variant="body2" 
+                                            sx={{ 
+                                                color: '#475569',
+                                                lineHeight: 1.6,
+                                                fontSize: '0.875rem',
+                                            }}
+                                        >
                                             {feature.description}
                                         </Typography>
                                     </CardContent>
