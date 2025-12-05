@@ -24,6 +24,9 @@ export const galleryService = {
         if (photoData.photo) {
             formData.append('image', photoData.photo);
         }
+        if (photoData.category) {
+            formData.append('category', photoData.category);
+        }
 
         const response = await fetch(BASE_URL, {
             method: 'POST',
@@ -42,6 +45,9 @@ export const galleryService = {
         if (photoData.photo) {
             const formData = new FormData();
             formData.append('image', photoData.photo);
+            if (photoData.category) {
+                formData.append('category', photoData.category);
+            }
             response = await fetch(`${BASE_URL}/${id}`, {
                 method: 'PUT',
                 body: formData,
@@ -55,6 +61,7 @@ export const galleryService = {
                 },
                 body: JSON.stringify({
                     image: photoData.photoUrl,
+                    category: photoData.category,
                 }),
             });
         }

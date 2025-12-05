@@ -17,24 +17,30 @@ import {
     Box,
     CircularProgress,
     Fade,
+    TextField,
+    MenuItem,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { galleryService } from '@/services/galleryService';
+import { categoryService } from '@/services/categoryService';
 
 export default function GalleryPage() {
     const [photos, setPhotos] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [editingPhoto, setEditingPhoto] = useState(null);
     const [formData, setFormData] = useState({
         photo: null,
         photoUrl: '',
+        category: '',
     });
     const [loading, setLoading] = useState(false);
 
     React.useEffect(() => {
         loadPhotos();
+        loadCategories();
     }, []);
 
     const loadPhotos = async () => {
@@ -54,11 +60,21 @@ export default function GalleryPage() {
         }
     };
 
+    const loadCategories = async () => {
+        try {
+            const data = await categoryService.getAll();
+            setCategories(data || []);
+        } catch (error) {
+            console.error('Error loading categories:', error);
+        }
+    };
+
     const handleOpenAddDialog = () => {
         setEditingPhoto(null);
         setFormData({
             photo: null,
             photoUrl: '',
+            category: '',
         });
         setOpenDialog(true);
     };
@@ -69,6 +85,7 @@ export default function GalleryPage() {
         setFormData({
             photo: null,
             photoUrl: '',
+            category: '',
         });
     };
 
@@ -92,10 +109,18 @@ export default function GalleryPage() {
             alert('Please select a photo');
             return;
         }
+        if (!formData.category) {
+            alert('Please select a category');
+            return;
+        }
 
         setLoading(true);
         try {
-            await galleryService.create(formData);
+            if (editingPhoto) {
+                await galleryService.update(editingPhoto.id ?? editingPhoto._id, formData);
+            } else {
+                await galleryService.create(formData);
+            }
             await loadPhotos();
             handleCloseDialog();
         } catch (error) {
@@ -124,14 +149,34 @@ export default function GalleryPage() {
     };
 
     return (
-        <Box sx={{ minHeight: 'calc(100vh - 64px)', background: 'linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%)', py: 4 }}>
-            <Container maxWidth="lg">
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box sx={{ minHeight: 'calc(100vh - 64px)', background: 'linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%)', py: { xs: 2, sm: 3, md: 4 } }}>
+            <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
+                <Box sx={{ 
+                    display: 'flex', 
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    justifyContent: 'space-between', 
+                    alignItems: { xs: 'flex-start', sm: 'center' }, 
+                    mb: { xs: 3, sm: 4 },
+                    gap: { xs: 2, sm: 0 }
+                }}>
                     <Box>
-                        <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: '#1e293b', mb: 0.5 }}>
+                        <Typography 
+                            variant="h4" 
+                            component="h1" 
+                            sx={{ 
+                                fontWeight: 700, 
+                                color: '#1e293b', 
+                                mb: 0.5,
+                                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' }
+                            }}
+                        >
                             Gallery Management
                         </Typography>
-                        <Typography variant="body2" color="textSecondary">
+                        <Typography 
+                            variant="body2" 
+                            color="textSecondary"
+                            sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+                        >
                             Showcase your photo collection
                         </Typography>
                     </Box>
@@ -141,9 +186,10 @@ export default function GalleryPage() {
                         onClick={handleOpenAddDialog}
                         sx={{
                             textTransform: 'none',
-                            px: 3,
-                            py: 1.5,
+                            px: { xs: 2, sm: 2.5, md: 3 },
+                            py: { xs: 1, sm: 1.25, md: 1.5 },
                             borderRadius: '12px',
+                            fontSize: { xs: '0.875rem', sm: '0.9rem', md: '1rem' },
                             background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
                             boxShadow: '0 4px 15px rgba(245, 87, 108, 0.4)',
                             '&:hover': {
@@ -193,15 +239,14 @@ export default function GalleryPage() {
                         </Button>
                     </Card>
                 ) : (
-                    <Grid container spacing={3}>
+                    <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
                         {photos.map((photo, index) => (
                             <Grid
                                 item
-                                size={{
-                                    xs:12,
-                                    sm:6,
-                                    md:4,
-                                }}
+                                xs={12}
+                                sm={6}
+                                md={4}
+                                lg={3}
                                 key={photo._id ?? photo.id ?? index}
                             >
                                 <Fade in timeout={300 + index * 100}>
@@ -294,8 +339,9 @@ export default function GalleryPage() {
                     fullWidth
                     PaperProps={{
                         sx: {
-                            borderRadius: '20px',
+                            borderRadius: { xs: '16px', sm: '20px' },
                             boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+                            m: { xs: 2, sm: 3 },
                         },
                     }}
                 >
@@ -311,6 +357,32 @@ export default function GalleryPage() {
                     </DialogTitle>
                     <DialogContent sx={{ p: 3 }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 2 }}>
+                            <Box>
+                                <Typography variant="body2" sx={{ mb: 1.5, fontWeight: 500, color: '#475569' }}>
+                                    Category *
+                                </Typography>
+                                <TextField
+                                    select
+                                    fullWidth
+                                    value={formData.category}
+                                    onChange={(e) => setFormData((prev) => ({ ...prev, category: e.target.value }))}
+                                    variant="outlined"
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            borderRadius: '12px',
+                                        },
+                                    }}
+                                >
+                                    <MenuItem value="">
+                                        <em>Select a category</em>
+                                    </MenuItem>
+                                    {categories.map((category) => (
+                                        <MenuItem key={category._id ?? category.id} value={category._id ?? category.id}>
+                                            {category.categoryname ?? category.name ?? category.title ?? category._id ?? category.id}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Box>
                             <Box>
                                 <Typography variant="body2" sx={{ mb: 1.5, fontWeight: 500, color: '#475569' }}>
                                     Select Image
