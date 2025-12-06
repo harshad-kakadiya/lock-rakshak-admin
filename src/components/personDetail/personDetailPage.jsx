@@ -33,6 +33,7 @@ import { personDetailService } from '@/services/personDetailService';
 export default function PersonDetailPage() {
     const [personDetails, setPersonDetails] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
+    const [openWarningDialog, setOpenWarningDialog] = useState(false);
     const [editingPerson, setEditingPerson] = useState(null);
     const [formData, setFormData] = useState({
         phone: '',
@@ -63,6 +64,11 @@ export default function PersonDetailPage() {
     };
 
     const handleOpenAddDialog = () => {
+        // Check if there's already a person detail entry
+        if (personDetails.length > 0) {
+            setOpenWarningDialog(true);
+            return;
+        }
         setEditingPerson(null);
         setFormData({
             phone: '',
@@ -439,6 +445,86 @@ export default function PersonDetailPage() {
                     >
                         {loading ? <CircularProgress size={20} color="inherit" /> : editingPerson ? 'Update' : 'Add'}
                     </Button>
+                    </DialogActions>
+            </Dialog>
+
+            {/* Warning Dialog for Multiple Entries */}
+            <Dialog
+                open={openWarningDialog}
+                onClose={() => setOpenWarningDialog(false)}
+                maxWidth="sm"
+                fullWidth
+                PaperProps={{
+                    sx: {
+                        borderRadius: '20px',
+                        boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+                    },
+                }}
+            >
+                <DialogTitle
+                    sx={{
+                        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                        color: '#ffffff',
+                        fontWeight: 600,
+                        py: 2.5,
+                    }}
+                >
+                    Only One Person Detail Allowed
+                </DialogTitle>
+                <DialogContent sx={{ p: 3, overflow: 'hidden', '&.MuiDialogContent-root': { overflowY: 'hidden' } }}>
+                    <Typography variant="body1" sx={{ mb: 2 }}>
+                        Only one person detail entry is allowed. Please edit or delete the existing person detail before adding a new one.
+                    </Typography>
+                    {personDetails.length > 0 && (
+                        <Box sx={{ mt: 2, p: 2, bgcolor: '#f8fafc', borderRadius: '8px', overflow: 'hidden' }}>
+                            <Typography variant="body2" color="textSecondary" sx={{ mb: 1.5, fontWeight: 600 }}>
+                                Current Person Detail:
+                            </Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                <Typography variant="body2">
+                                    <strong>Phone:</strong> {personDetails[0].phone || '—'}
+                                </Typography>
+                                <Typography variant="body2">
+                                    <strong>Address:</strong> {personDetails[0].address || '—'}
+                                </Typography>
+                                <Typography variant="body2">
+                                    <strong>Email:</strong> {personDetails[0].email || '—'}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    )}
+                </DialogContent>
+                <DialogActions sx={{ p: 3, pt: 2 }}>
+                    <Button
+                        onClick={() => setOpenWarningDialog(false)}
+                        sx={{
+                            textTransform: 'none',
+                            borderRadius: '10px',
+                            px: 3,
+                        }}
+                    >
+                        Close
+                    </Button>
+                    {personDetails.length > 0 && (
+                        <Button
+                            onClick={() => {
+                                setOpenWarningDialog(false);
+                                handleOpenEditDialog(personDetails[0]);
+                            }}
+                            variant="contained"
+                            sx={{
+                                textTransform: 'none',
+                                borderRadius: '10px',
+                                px: 3,
+                                background: 'linear-gradient(135deg, #a78bfa 0%, #c084fc 100%)',
+                                '&:hover': {
+                                    background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                                },
+                            }}
+                        >
+                            Edit Existing Person Detail
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
         </Box>

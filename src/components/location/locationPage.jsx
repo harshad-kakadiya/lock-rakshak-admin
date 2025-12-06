@@ -33,6 +33,7 @@ import { locationService } from '@/services/locationService';
 export default function LocationPage() {
     const [locations, setLocations] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
+    const [openWarningDialog, setOpenWarningDialog] = useState(false);
     const [editingLocation, setEditingLocation] = useState(null);
     const [formData, setFormData] = useState({
         link: '',
@@ -60,6 +61,11 @@ export default function LocationPage() {
     };
 
     const handleOpenAddDialog = () => {
+        // Check if there's already a location entry
+        if (locations.length > 0) {
+            setOpenWarningDialog(true);
+            return;
+        }
         setEditingLocation(null);
         setFormData({
             link: '',
@@ -404,7 +410,97 @@ export default function LocationPage() {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
+                {/* Warning Dialog for Multiple Entries */}
+                <Dialog
+                    open={openWarningDialog}
+                    onClose={() => setOpenWarningDialog(false)}
+                    maxWidth="sm"
+                    fullWidth
+                    PaperProps={{
+                        sx: {
+                            borderRadius: { xs: '16px', sm: '20px' },
+                            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+                            m: { xs: 2, sm: 3 },
+                        },
+                    }}
+                >
+                    <DialogTitle
+                        sx={{
+                            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                            color: '#ffffff',
+                            fontWeight: 600,
+                            py: 2.5,
+                        }}
+                    >
+                        Only One Location Allowed
+                    </DialogTitle>
+                    <DialogContent sx={{ p: 3, overflow: 'hidden', '&.MuiDialogContent-root': { overflowY: 'hidden' } }}>
+                        <Typography variant="body1" sx={{ mb: 2 }}>
+                            Only one location entry is allowed. Please edit or delete the existing location before adding a new one.
+                        </Typography>
+                        {locations.length > 0 && (
+                            <Box sx={{ mt: 2, p: 2, bgcolor: '#f8fafc', borderRadius: '8px', overflow: 'hidden' }}>
+                                <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                                    Current Location:
+                                </Typography>
+                                <MuiLink
+                                    href={locations[0].link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                        color: '#3b82f6',
+                                        textDecoration: 'none',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 0.5,
+                                        wordBreak: 'break-all',
+                                        '&:hover': {
+                                            textDecoration: 'underline',
+                                        },
+                                    }}
+                                >
+                                    {locations[0].link}
+                                    <OpenInNewIcon sx={{ fontSize: 16, flexShrink: 0 }} />
+                                </MuiLink>
+                            </Box>
+                        )}
+                    </DialogContent>
+                    <DialogActions sx={{ p: 3, pt: 2 }}>
+                        <Button
+                            onClick={() => setOpenWarningDialog(false)}
+                            sx={{
+                                textTransform: 'none',
+                                borderRadius: '10px',
+                                px: 3,
+                            }}
+                        >
+                            Close
+                        </Button>
+                        {locations.length > 0 && (
+                            <Button
+                                onClick={() => {
+                                    setOpenWarningDialog(false);
+                                    handleOpenEditDialog(locations[0]);
+                                }}
+                                variant="contained"
+                                sx={{
+                                    textTransform: 'none',
+                                    borderRadius: '10px',
+                                    px: 3,
+                                    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                                    '&:hover': {
+                                        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                                    },
+                                }}
+                            >
+                                Edit Existing Location
+                            </Button>
+                        )}
+                    </DialogActions>
+                </Dialog>
             </Container>
         </Box>
     );
 }
+
