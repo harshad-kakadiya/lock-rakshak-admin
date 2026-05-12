@@ -13,7 +13,7 @@
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "@mui/styled-engine-sc": "^7.3.5",
-    "next": "^16.0.7",
+    "next": "16.0.10",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-easy-crop": "^5.5.6",
